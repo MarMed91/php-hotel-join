@@ -225,6 +225,171 @@
       }
     }
   }
+  class Pagamento {
+
+    private $id;
+    private $status;
+    private $price;
+
+    function __construct($id, $status, $price) {
+
+      $this->id = $id;
+      $this->status = $status;
+      $this->price = $price;
+    }
+
+    function setIdP() {
+
+      $this->id = $id;
+    }
+    function setStatus() {
+
+      $this->status = $status;
+    }
+    function setPrice() {
+
+      $this->price = $price;
+    }
+
+
+    function getIdP() {
+
+      return $this->id;
+    }
+    function getStatus() {
+
+      return $this->status;
+    }
+    function getPrice() {
+
+      return $this->price;
+    }
+
+
+    public static function getPagamentiById($conn, $id) {
+
+      $sql = "
+
+        SELECT *
+        FROM pagamenti
+        WHERE id = $id
+
+      ";
+
+      $result = $conn->query($sql);
+
+      // var_dump($sql); die();
+
+      if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $pagamento = new Pagamento(
+                      $row["id"],
+                      $row["status"],
+                      $row["price"]);
+
+        return $pagamento;
+      }
+    }
+  }
+  class Ospite {
+
+    private $id;
+    private $name;
+    private $date_of_birth;
+    private $lastname;
+    private $document_type;
+    private $document_number;
+
+    function __construct($id, $name, $date_of_birth, $lastname, $document_type, $document_number) {
+
+      $this->id = $id;
+      $this->name = $name;
+      $this->date_of_birth = $date_of_birth;
+      $this->lastname = $lastname;
+      $this->document_type = $document_type;
+      $this->document_number = $document_number;
+    }
+
+    function setIdO() {
+
+      $this->id = $id;
+    }
+    function setName() {
+
+      $this->name = $name;
+    }
+    function setDateOfBirth() {
+
+      $this->date_of_birth = $date_of_birth;
+    }
+    function setLastName() {
+
+      $this->lastname = $lastname;
+    }
+    function setDocumentType() {
+
+      $this->document_type = $document_type;
+    }
+    function setDocumentNumber() {
+
+      $this->document_number = $document_number;
+    }
+
+
+    function getIdO() {
+
+      return $this->id;
+    }
+    function getName() {
+
+      return $this->name;
+    }
+    function getDateOfBirth()) {
+
+      return $this->date_of_birth;
+    }
+    function getLastName() {
+
+      return $this->lastname;
+    }
+    function getDocumentType() {
+
+      return $this->document_type;
+    }
+    function getDocumentNumber() {
+
+      return $this->document_type;
+    }
+
+
+    public static function getOspiteById($conn, $id) {
+
+      $sql = "
+
+        SELECT *
+        FROM ospiti
+        WHERE id = $id
+
+      ";
+
+      $result = $conn->query($sql);
+
+      // var_dump($sql); die();
+
+      if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $ospite = new Ospite(
+                      $row["id"],
+                      $row["name"],
+                      $row["date_of_birth"],
+                      $row["lastname"],
+                      $row["document_type"],
+                      $row["document_number"]);
+
+        return $ospite;
+      }
+    }
+  }
 
   $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -242,13 +407,22 @@
 
     $stanza_id = $prenotazione->getStanzaId();
     $configurazione_id = $prenotazione->getConfigurazioneById();
+    $pagamenti_id = $prenotazione->getPagamentiById();
+    $ospiti_id = $prenotazione->getOspiteById();
+
     $stanza = Stanza::getStanzaById($conn, $stanza_id);
     $configurazione = Configurazione::getConfigurazioneById($conn, $configurazione_id);
+    $pagamente = Pagamento::getPagamentiById($conn, $pagamenti_id);
+    $ospite = Ospite::getOspitiById($conn, $ospiti_id);
 
     echo "Prenotazione: " . $prenotazione->getId() . "<br>" .
           "-Stanza : " .  $stanza->getId() . " ; " .$stanza->getRoomNumber() . " ; " . $stanza->getFloor() ." ; " . $stanza->getBeds() . "<br>--> " .
           "<br><br>";
           "-Configurazione : " .  $configurazione->getIdC() . " ; " .$configurazione->getTitle() . " ; " . $configurazione->getDesciption() ." ; " . $configurazione->getCreated() . "<br>--> " .
+          "<br><br>";
+          "-Pagamento : " .  $pagamento->getIdP() . " ; " .$pagamento->getStatus() . " ; " . $pagamento->getPrice() ." ; "  . "<br>--> " .
+          "<br><br>";
+          "-Ospite : " .  $ospite->getIdO() . " ; " .$ospite->getName() . " ; " . $ospite->getDateOfBirth() ." ; "  .$ospite->getLastName() ." ; ".$ospite->getDocumentType() ." ; ".$ospite->getDocumentNumber() ."<br>--> " .
           "<br><br>";
   }
 
