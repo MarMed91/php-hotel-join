@@ -1,28 +1,157 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
-    <script id="prenotazioni-template" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js" charset="utf-8" type="text/javascript">
-    <div class="prenotazione" data-id = "{{ id }}">
-        <h1>{{ stanza_id }}</h1>
-        <ul>
-            <li class="name_lastname"></li>
-        </ul>
-    </div>
-    </script>
+<?php
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="script.js"></script>
-    <title></title>
-  </head>
-  <body>
-    <h1>Prenotazioni Maggio</h1>
-    <div class="prenotazioni"></div>
+  include "databaseInfo.php";
 
-  </body>
-</html>
+  class Prenotazione {
+
+    private $id;
+    private $stanza_id;
+    private $configurazione_id;
+    private $create_at;
+
+    public function __construct($id, $stanza_id, $configurazione_id, $create_at) {
+
+      $this->id = $id;
+      $this->stanza_id = $stanza_id;
+      $this->configurazione_id = $configurazione_id;
+      $this->create_at = $create_at;
+    }
+
+    public function setId() {
+
+      $this->id = $id;
+    }
+    public function setStanzaId() {
+
+      $this->stanza_id = $stanza_id;
+    }
+
+    public function getId() {
+
+      return $this->id;
+    }
+    public function getStanzaId() {
+
+      return $this->stanza_id;
+    }
+
+    public function getAsArray() {
+
+      return [
+        "id" => $this->id,
+        "stanza_id" => $this->stanza_id,
+        "configurazione_id" => $this->configurazione_id,
+        "create_at" => $this->create_at
+      ];
+    }
+
+    public static function getAllPrenotazioni($conn) {
+
+      $sql = "
+
+      FROM prenotazioni
+      WHERE created_at > '2018-05-01'
+        AND created_at <'2018-06-01
+
+      ";
+
+      $result = $conn->query($sql);
+
+      // var_dump($sql); die();
+
+      if ($result->num_rows > 0) {
+        $prenotazioni = [];
+        while($row = $result->fetch_assoc()) {
+          $prenotazioni[] =
+              new Prenotazione($row["id"],
+                               $row["stanza_id"],
+                               $row["configurazione_id"],
+                               $row["created_at"]);
+        }
+      }
+      return $prenotazioni;
+    }
+  }
+  class Stanza {
+
+    private $id;
+    private $room_number;
+    private $floor;
+    private $beds;
+
+    function __construct($id, $room_number, $floor, $beds) {
+
+      $this->id = $id;
+      $this->room_number = $room_number;
+      $this->floor = $floor;
+      $this->beds = $beds;
+    }
+
+    function setRoomNumber() {
+
+      $this->room_number = $room_number;
+    }
+    function setFloor() {
+
+      $this->floor = $floor;
+    }
+
+    function getRoomNumber() {
+
+      return $this->room_number;
+    }
+    function getFloor() {
+
+      return $this->floor;
+    }
+
+    public static function getStanzaById($conn, $id) {
+
+      $sql = "
+
+        SELECT *
+        FROM stanze
+        WHERE id = $id
+
+      ";
+
+      $result = $conn->query($sql);
+
+      // var_dump($sql); die();
+
+      if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $stanza = new Stanza(
+                      $row["id"],
+                      $row["room_number"],
+                      $row["floor"],
+                      $row["beds"]);
+
+        return $stanza;
+      }
+    }
+  }
+
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  if ($conn->connect_errno) {
+
+    echo $conn->connect_error;
+    return;
+  }
+
+  // var_dump($conn); die();
+
+  $prenotazioni = Prenotazione::getAllPrenotazioni($conn);
+
+  foreach ($prenotazioni as $prenotazione) {
+
+    $stanza_id = $prenotazione->getStanzaId();
+    $stanza = Stanza::getStanzaById($conn, $stanza_id);
+
+    echo "id: " . $prenotazione->getId() . "<br>" .
+          "--> " . $stanza->getRoomNumber() . "<br>--> " . $stanza->getFloor() .
+          "<br><br>";
+  }
+
+ ?>
