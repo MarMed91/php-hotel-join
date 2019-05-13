@@ -150,6 +150,81 @@
       }
     }
   }
+  class Configurazione {
+
+    private $id;
+    private $title;
+    private $description;
+    private $created_at;
+
+    function __construct($id, $title, $description, $created_at) {
+
+      $this->id = $id;
+      $this->title = $title;
+      $this->description = $description;
+      $this->created_at = $created_at;
+    }
+
+    function setIdC() {
+
+      $this->id = $id;
+    }
+    function setTitle() {
+
+      $this->title = $title;
+    }
+    function setDescription() {
+
+      $this->description = $description;
+    }
+    function setCreated() {
+
+      $this->create_at = $created_at;
+    }
+
+    function getIdC() {
+
+      return $this->id;
+    }
+    function getTitle() {
+
+      return $this->title;
+    }
+    function getDesciption() {
+
+      return $this->description;
+    }
+    function getCreated() {
+
+      return $this->created_at;
+    }
+
+    public static function getConfigurazioneById($conn, $id) {
+
+      $sql = "
+
+        SELECT *
+        FROM configurazioni
+        WHERE id = $id
+
+      ";
+
+      $result = $conn->query($sql);
+
+      // var_dump($sql); die();
+
+      if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $configurazione = new Configurazione(
+                      $row["id"],
+                      $row["title"],
+                      $row["description"],
+                      $row["create_at"]);
+
+        return $configurazione;
+      }
+    }
+  }
 
   $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -166,10 +241,14 @@
   foreach ($prenotazioni as $prenotazione) {
 
     $stanza_id = $prenotazione->getStanzaId();
+    $configurazione_id = $prenotazione->getConfigurazioneById();
     $stanza = Stanza::getStanzaById($conn, $stanza_id);
+    $configurazione = Configurazione::getConfigurazioneById($conn, $configurazione_id);
 
     echo "Prenotazione: " . $prenotazione->getId() . "<br>" .
           "-Stanza : " .  $stanza->getId() . " ; " .$stanza->getRoomNumber() . " ; " . $stanza->getFloor() ." ; " . $stanza->getBeds() . "<br>--> " .
+          "<br><br>";
+          "-Configurazione : " .  $configurazione->getIdC() . " ; " .$configurazione->getTitle() . " ; " . $configurazione->getDesciption() ." ; " . $configurazione->getCreated() . "<br>--> " .
           "<br><br>";
   }
 
