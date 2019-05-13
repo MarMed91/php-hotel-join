@@ -53,7 +53,7 @@
       FROM prenotazioni
       WHERE created_at > '2018-05-01 00:00:00'
         AND created_at <'2018-06-01 00:00:00'
-      ORDER BY created_at DESC
+      ORDER BY id DESC
 
       ";
       $result = $conn->query($sql);
@@ -90,6 +90,10 @@
       $this->beds = $beds;
     }
 
+    function setId() {
+
+      $this->id = $id;
+    }
     function setRoomNumber() {
 
       $this->room_number = $room_number;
@@ -98,7 +102,15 @@
 
       $this->floor = $floor;
     }
+    function setBeds() {
 
+      $this->beds = $beds;
+    }
+
+    function getId() {
+
+      return $this->id;
+    }
     function getRoomNumber() {
 
       return $this->room_number;
@@ -106,6 +118,10 @@
     function getFloor() {
 
       return $this->floor;
+    }
+    function getBeds() {
+
+      return $this->beds;
     }
 
     public static function getStanzaById($conn, $id) {
@@ -152,8 +168,8 @@
     $stanza_id = $prenotazione->getStanzaId();
     $stanza = Stanza::getStanzaById($conn, $stanza_id);
 
-    echo "id: " . $prenotazione->getId() . "<br>" .
-          "--> " . $stanza->getRoomNumber() . "<br>--> " . $stanza->getFloor() .
+    echo "Prenotazione: " . $prenotazione->getId() . "<br>" .
+          "-Stanza : " .  $stanza->getId() . " ; " .$stanza->getRoomNumber() . " ; " . $stanza->getFloor() ." ; " . $stanza->getBeds() . "<br>--> " .
           "<br><br>";
   }
 
