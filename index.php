@@ -49,13 +49,14 @@
 
       $sql = "
 
+      SELECT *
       FROM prenotazioni
-      WHERE created_at > '2018-05-01'
-        AND created_at <'2018-06-01
+      WHERE created_at > '2018-05-01 00:00:00'
+        AND created_at <'2018-06-01 00:00:00'
 
       ";
-
       $result = $conn->query($sql);
+      var_dump($result);
 
       // var_dump($sql); die();
 
@@ -69,6 +70,7 @@
                                $row["created_at"]);
         }
       }
+      var_dump($prenotazioni);
       return $prenotazioni;
     }
   }
