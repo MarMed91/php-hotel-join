@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body {
+
+  background: #ddd;
+}
+
+h1 {
+
+  background: blue;
+  color: white;
+
+  text-align: center;
+}
+
+.prenotazioni {
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.prenotazione {
+
+  width: 200px;
+  height: 200px;
+
+  margin: auto;
+  padding: 20px;
+
+  border: 2px solid black;
+  background: white;
+  color: black;
+}
