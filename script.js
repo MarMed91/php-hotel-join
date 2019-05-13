@@ -8,15 +8,15 @@ function ospitiList() {
 
       var ospiti = JSON.parse(data);
 
-      var container = $(".prenotazioni1");
+      var container = $(".nome_cognome");
 
-      var template = $("#nameSurname-template").html();
+      var template = $("#nomeCognome-template").html();
       var compiled = Handlebars.compile(template);
 
       for (var i = 0; i < ospiti.length; i++) {
 
-        var ospiti = ospiti[i];
-        var finalHTML1 = compiled(ospiti);
+        var ospite = ospiti[i];
+        var finalHTML1 = compiled(ospite);
         container.append(finalHTML1);
       }
     }

@@ -11,7 +11,11 @@
         <h1>{{ stanza_id }}</h1>
     </div>
     </script>
-    
+    <script id="nomeCognome-template" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js" charset="utf-8" type="text/javascript">
+    <div class="persona" data-id = "{{ id }}">
+        <h1>{{ name }} {{ lastname }}</h1>
+    </div>
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="script.js"></script>
@@ -20,6 +24,6 @@
   <body>
     <h1>Prenotazioni Maggio</h1>
     <div class="prenotazioni"></div>
-    <div class="prenotazioni1"></div>
+    <div class="nome_cognome"></div>
   </body>
 </html>
