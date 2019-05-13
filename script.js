@@ -14,7 +14,7 @@ function ospitiList() {
       for (var i = 0; i < ospiti.length; i++) {
 
         var ospite = ospiti[i];
-        me.find(".name_lastname").text(ospite);
+        me.find(".name_lastname").text(ospite["name"], ospite["lastname"]);
       }
     }
   });
