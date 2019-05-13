@@ -1,6 +1,8 @@
 <?php
 
+if ($_POST["id"]) {
 
+$id = $_POST["id"];
 
 $servername = "localhost"; // dati
 $username = "root";
@@ -38,6 +40,7 @@ if ($result->num_rows > 0) {
     echo "0 results";
   }
   $conn->close(); //chiudo connessione;
+}
 
   echo json_encode($res);
  ?>

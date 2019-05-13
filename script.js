@@ -1,23 +1,20 @@
 function ospitiList() {
 
+  var me = $(this);
+  var id = me.data("id");
   $.ajax({
 
     url: "getOspitiList.php",
+    data: { id:id },
     method: "POST",
     success: function(data) {
 
       var ospiti = JSON.parse(data);
 
-      var container = $(".nome_cognome");
-
-      var template = $("#nomeCognome-template").html();
-      var compiled = Handlebars.compile(template);
-
       for (var i = 0; i < ospiti.length; i++) {
 
         var ospite = ospiti[i];
-        var finalHTML1 = compiled(ospite);
-        container.append(finalHTML1);
+        me.find(".name_lastname").text(ospite);
       }
     }
   });
@@ -52,7 +49,7 @@ function prenotazioniMaggio() {
 function init() {
 
   prenotazioniMaggio();
-  ospitiList();
+  $(document).on("click", ".prenotazione", ospitiList);
 }
 
 $(document).ready(init);
