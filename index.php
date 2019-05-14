@@ -154,10 +154,9 @@
 
     private $id;
     private $title;
-    private $description;
-    private $created_at;
 
-    function __construct($id, $title, $description, $created_at) {
+
+    function __construct($id, $title) {
 
       $this->id = $id;
       $this->title = $title;
@@ -173,14 +172,7 @@
 
       $this->title = $title;
     }
-    function setDescription() {
 
-      $this->description = $description;
-    }
-    function setCreated() {
-
-      $this->create_at = $created_at;
-    }
 
     function getIdC() {
 
@@ -190,14 +182,7 @@
 
       return $this->title;
     }
-    function getDesciption() {
 
-      return $this->description;
-    }
-    function getCreated() {
-
-      return $this->created_at;
-    }
 
     public static function getConfigurazioneById($conn, $id) {
 
@@ -217,9 +202,8 @@
         $row = $result->fetch_assoc();
         $configurazione = new Configurazione(
                       $row["id"],
-                      $row["title"],
-                      $row["description"],
-                      $row["create_at"]);
+                      $row["title"]);
+
 
         return $configurazione;
       }
@@ -418,7 +402,7 @@
     echo "Prenotazione: " . $prenotazione->getId() . "<br>" .
           "-Stanza : " .  $stanza->getId() . " ; " .$stanza->getRoomNumber() . " ; " . $stanza->getFloor() ." ; " . $stanza->getBeds() . "<br>--> " .
           "<br><br>";
-          "-Configurazione : " .  $configurazione->getIdC() . " ; " .$configurazione->getTitle() . " ; " . $configurazione->getDesciption() ." ; " . $configurazione->getCreated() . "<br>--> " .
+          "-Configurazione : " .  $configurazione->getIdC() . " ; " .$configurazione->getTitle() .  "<br>--> " .
           "<br><br>";
           "-Pagamento : " .  $pagamento->getIdP() . " ; " .$pagamento->getStatus() . " ; " . $pagamento->getPrice() ." ; "  . "<br>--> " .
           "<br><br>";
