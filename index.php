@@ -344,7 +344,7 @@
 
       return $this->name;
     }
-    function getDateOfBirth()) {
+    function getDateOfBirth() {
 
       return $this->date_of_birth;
     }
