@@ -428,7 +428,7 @@
 
   $stanza_id = $prenotazione->getStanzaId();
   $configurazione_id = $prenotazione->getConfigurazioneId();
-  $pagamenti_id = $prenotazione->getPagamentiById();
+  $pagamenti_id = $prenotazione->getId();
   $ospiti_id = $prenotazione->getId();
 
    $stanza = Stanza::getStanzaById($conn, $stanza_id);
