@@ -17,13 +17,21 @@
       $this->create_at = $create_at;
     }
 
-    public function setId() {
+    public function setId($id) {
 
       $this->id = $id;
     }
-    public function setStanzaId() {
+    public function setStanzaId($stanza_id) {
 
       $this->stanza_id = $stanza_id;
+    }
+    public function setConfigurazioneId($configurazione_id) {
+
+      $this->configurazione_id = $configurazione_id;
+    }
+    public function setCreatedAt($create_at) {
+
+      $this->created_at = $create_at;
     }
 
     public function getId() {
@@ -33,6 +41,14 @@
     public function getStanzaId() {
 
       return $this->stanza_id;
+    }
+    public function getConfigurazioneId() {
+
+      return $this->configurazione_id;
+    }
+    public function getCreatedAt() {
+
+      return $this->create_at;
     }
 
     public function getAsArray() {
@@ -90,19 +106,19 @@
       $this->beds = $beds;
     }
 
-    function setId() {
+    function setId($id) {
 
       $this->id = $id;
     }
-    function setRoomNumber() {
+    function setRoomNumber($room_number) {
 
       $this->room_number = $room_number;
     }
-    function setFloor() {
+    function setFloor($floor) {
 
       $this->floor = $floor;
     }
-    function setBeds() {
+    function setBeds($beds) {
 
       $this->beds = $beds;
     }
@@ -154,9 +170,11 @@
 
     private $id;
     private $title;
+    private $description;
+    private $created_at;
 
 
-    function __construct($id, $title) {
+    function __construct($id, $title, $description, $created_at) {
 
       $this->id = $id;
       $this->title = $title;
@@ -164,13 +182,21 @@
       $this->created_at = $created_at;
     }
 
-    function setIdC() {
+    function setIdC($id) {
 
       $this->id = $id;
     }
-    function setTitle() {
+    function setTitle($title) {
 
       $this->title = $title;
+    }
+    function setDescription($description) {
+
+      $this->description = $description;
+    }
+    function setCreated($created_at) {
+
+      $this->created_at = $created_at;
     }
 
 
@@ -181,6 +207,14 @@
     function getTitle() {
 
       return $this->title;
+    }
+    function getDescription() {
+
+      return $this->description;
+    }
+    function getCreated() {
+
+      return $this->created_at;
     }
 
 
@@ -202,7 +236,9 @@
         $row = $result->fetch_assoc();
         $configurazione = new Configurazione(
                       $row["id"],
-                      $row["title"]);
+                      $row["title"],
+                      $row["description"],
+                      $row["created_at"]);
 
 
         return $configurazione;
@@ -222,15 +258,15 @@
       $this->price = $price;
     }
 
-    function setIdP() {
+    function setIdP($id) {
 
       $this->id = $id;
     }
-    function setStatus() {
+    function setStatus($status) {
 
       $this->status = $status;
     }
-    function setPrice() {
+    function setPrice($price) {
 
       $this->price = $price;
     }
@@ -294,27 +330,27 @@
       $this->document_number = $document_number;
     }
 
-    function setIdO() {
+    function setIdO($id) {
 
       $this->id = $id;
     }
-    function setName() {
+    function setName($name) {
 
       $this->name = $name;
     }
-    function setDateOfBirth() {
+    function setDateOfBirth($date_of_birth) {
 
       $this->date_of_birth = $date_of_birth;
     }
-    function setLastName() {
+    function setLastName($lastname) {
 
       $this->lastname = $lastname;
     }
-    function setDocumentType() {
+    function setDocumentType($document_type) {
 
       $this->document_type = $document_type;
     }
-    function setDocumentNumber() {
+    function setDocumentNumber($document_number) {
 
       $this->document_number = $document_number;
     }
@@ -346,14 +382,15 @@
     }
 
 
-    public static function getOspiteById($conn, $id) {
+    public static function getOspiteById($conn, $prenotazione_id) {
 
       $sql = "
 
-        SELECT *
-        FROM ospiti
-        WHERE id = $id
-
+      SELECT *
+      FROM prenotazioni_has_ospiti
+      JOIN ospiti
+        ON prenotazioni_has_ospiti.ospite_id = ospiti.id
+      WHERE prenotazione_id = $prenotazione_id
       ";
 
       $result = $conn->query($sql);
@@ -387,20 +424,20 @@
 
   $prenotazioni = Prenotazione::getAllPrenotazioni($conn);
 
-  foreach ($prenotazioni as $prenotazione) {
+ foreach ($prenotazioni as $prenotazione) {
 
-    $stanza_id = $prenotazione->getStanzaId();
-    $configurazione_id = $prenotazione->getConfigurazioneById();
-    $pagamenti_id = $prenotazione->getPagamentiById();
-    $ospiti_id = $prenotazione->getOspiteById();
+  $stanza_id = $prenotazione->getStanzaId();
+  $configurazione_id = $prenotazione->getConfigurazioneId();
+  $pagamenti_id = $prenotazione->getPagamentiById();
+  $ospiti_id = $prenotazione->getId();
 
-    $stanza = Stanza::getStanzaById($conn, $stanza_id);
-    $configurazione = Configurazione::getConfigurazioneById($conn, $configurazione_id);
-    $pagamente = Pagamento::getPagamentiById($conn, $pagamenti_id);
-    $ospite = Ospite::getOspitiById($conn, $ospiti_id);
+   $stanza = Stanza::getStanzaById($conn, $stanza_id);
+   $configurazione = Configurazione::getConfigurazioneById($conn, $configurazione_id);
+   $pagamente = Pagamento::getPagamentiById($conn, $pagamenti_id);
+   $ospite = Ospite::getOspiteById($conn, $ospiti_id);
 
-    echo "Prenotazione: " . $prenotazione->getId() . "<br>" .
-          "-Stanza : " .  $stanza->getId() . " ; " .$stanza->getRoomNumber() . " ; " . $stanza->getFloor() ." ; " . $stanza->getBeds() . "<br>--> " .
+   echo "Prenotazione: " . $prenotazione->getId() . "<br>" .
+          "-Stanza : " .  $stanza->getId() . " ; " .$stanza->getRoomNumber() . " ; " . $stanza->getFloor() ." ; " . $stanza->getBeds() . "<br>--> ".
           "<br><br>";
           "-Configurazione : " .  $configurazione->getIdC() . " ; " .$configurazione->getTitle() .  "<br>--> " .
           "<br><br>";
