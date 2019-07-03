@@ -218,7 +218,7 @@
     }
 
 
-    public static function getConfigurazioneById($conn, $id) {
+    public static function getConfigurazioneById($conn, $configurazione_id) {
 
       $sql = "
 
@@ -240,8 +240,8 @@
                       $row["description"],
                       $row["created_at"]);
 
-
         return $configurazione;
+
       }
     }
   }
@@ -286,7 +286,7 @@
     }
 
 
-    public static function getPagamentiById($conn, $id) {
+    public static function getPagamentiById($conn, $pagamenti_id) {
 
       $sql = "
 
@@ -297,7 +297,6 @@
       ";
 
       $result = $conn->query($sql);
-
       // var_dump($sql); die();
 
       if ($result->num_rows > 0) {
@@ -382,7 +381,7 @@
     }
 
 
-    public static function getOspiteById($conn, $prenotazione_id) {
+    public static function getOspiteById($conn, $ospiti_id) {
 
       $sql = "
 
